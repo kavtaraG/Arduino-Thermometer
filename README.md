@@ -1,3 +1,8 @@
+## DESCRIPTION
+	# Program made by C++ rules;
+	# Made global variables and inside function prototypes local variables;
+	# Decleared two void function prototypes and executed in void loop;
+
 ## THERMOMETER 
 	# app contains:
 	1. LCD 16x2 I2C with adapter;

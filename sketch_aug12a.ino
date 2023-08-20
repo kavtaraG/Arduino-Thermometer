@@ -1,38 +1,35 @@
 // Author: Giorgi Kavtaradze
-// Date: 15.08.2023
+// Date: 20.08.2023
 /******************************/
 #include <LiquidCrystal_I2C.h>
 
 #define LM36DZ A0
+
+using namespace std;
+
+const int RELAY = 2;
 int tempSensor;
-
-int RELAY = 2;
-
 LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+  
+  
+
+void relay();
+void lcd_display();
+
 void setup() {
  pinMode(RELAY, OUTPUT);
+ digitalWrite(tempSensor, 1);
 
- lcd.init();
- lcd.backlight();
+}
 
-};
-
-void loop() { 
-  tempSensor = analogRead(LM36DZ); 
-  float setTemp = 20.0;
-  float mv = 5000.0 * tempSensor / 1023.0;         // measures in millivolts;
-  float roomTemp = -1 * ((mv - 500.0)/ 10.0 );      // measures in celcius;
+void relay(){
+  double setTemp = 20.0;
+  int tempSensor = analogRead(LM36DZ);
+  float mv = (5000.0 * tempSensor) / 1023.0;
+  float roomTemp = -1 * (mv - 500.0) / 10.0;
 
 
-  lcd.blink();
-  lcd.setCursor(0, 0);
-  lcd.print("Set Temp = ");
-  lcd.print(setTemp);
-
-
-  lcd.setCursor(0, 1);
-  lcd.print("Room Temp = ");
-  lcd.print(roomTemp);
 
   if(setTemp >= roomTemp){
     digitalWrite(RELAY, 1);
@@ -41,4 +38,33 @@ void loop() {
   };
 
   delay(1000);
+
+  return;
 };
+
+void lcd_display(){
+  double setTemp = 20.0;
+  int tempSensor = analogRead(LM36DZ);
+  float mv = (5000.0 * tempSensor) / 1023.0;
+  float roomTemp = -1 * (mv - 500.0) / 10.0;
+
+  lcd.init();
+  lcd.backlight();
+
+  lcd.setCursor(0, 0);
+  lcd.print("Set Temp = ");
+  lcd.print(setTemp);
+
+  lcd.setCursor(0, 1);
+  lcd.print("Room temp = ");
+  lcd.print(roomTemp);
+
+  delay(1000);
+  return;
+}
+
+void loop() {
+ 
+  lcd_display();
+  relay();
+}
